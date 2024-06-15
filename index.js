@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const cors = require("cors")
 
 // Importar rutas
 const userRoutes = require('./routes/user.routes');
@@ -12,6 +13,9 @@ const app = express();
 
 // Middleware para parsear JSON
 app.use(express.json());
+
+// Deshabilito CORS policy
+app.use(cors())
 
 // Conexión a MongoDB Atlas
 const MONGO_URI = process.env.MONGO_URI;
