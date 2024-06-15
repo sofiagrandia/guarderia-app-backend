@@ -9,13 +9,13 @@ const userController = {
     // Registro de usuario
     register: async (req, res) => {
         try {
-            const { name, email, password, role } = req.body;
+            const { name, email, password } = req.body;
 
             const newUser = new User({
                 name,
                 email,
                 password: password,
-                role
+                role: 'user'
             });
 
             await newUser.save();
