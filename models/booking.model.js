@@ -6,21 +6,21 @@ const bookingSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
-    vehicle: {
+    class: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Vehicle',
+        ref: 'Class',
         required: true
     },
-    startDate: {
-        type: Date,
-        required: true
-    },
-    endDate: {
+    date: {
         type: Date,
         required: true
     },
     price: {
         type: Number,
+        required: true
+    },
+    extras: {
+        type: Boolean,
         required: true
     },
     discount: {

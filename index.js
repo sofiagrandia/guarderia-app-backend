@@ -14,7 +14,7 @@ const app = express();
 // Middleware para parsear JSON
 app.use(express.json());
 
-// Deshabilito CORS policy
+// Deshabilito CORS policy - automaticamente express impide el acceso a backend, esto lo habilita para nuestro front
 app.use(cors())
 
 // Conexión a MongoDB Atlas
