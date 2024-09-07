@@ -75,14 +75,14 @@ const centros = [
     image: ['center1.jpg'],
     telefono: '123-456-7890',
     plazasDisponibles: 5,
-    servicios: 'All services available',
+    servicios: [servicios[0]._id, servicios[1]._id],
   },
   {_id: new mongoose.Types.ObjectId(),
     direccion: '456 Animal Avenue',
     image: ['center2.jpg'],
     telefono: '987-654-3210',
     plazasDisponibles: 8,
-    servicios: 'Limited services available',
+    servicios: [servicios[1]._id],
   },
 ];
 

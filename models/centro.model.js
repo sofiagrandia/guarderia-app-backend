@@ -18,8 +18,8 @@ const centroSchema = new mongoose.Schema({
         required: true
     },
     servicios:{
-        type: String,
-        ref:'Servicios',
+        type: [mongoose.Schema.Types.ObjectId],
+        ref:'Servicio',
         required: true
     }
 });
