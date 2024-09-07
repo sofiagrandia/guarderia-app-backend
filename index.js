@@ -6,8 +6,8 @@ const cors = require("cors")
 // Importar rutas
 const userRoutes = require('./routes/user.routes');
 const bookingRoutes = require('./routes/booking.routes');
-const classRoutes = require('./routes/class.routes');
-const facilityRoutes = require('./routes/facility.routes');
+const classRoutes = require('./routes/centros.routes');
+const facilityRoutes = require('./routes/servicios.routes');
 
 dotenv.config(); // Cargar variables de entorno desde .env
 const app = express();
@@ -30,10 +30,10 @@ mongoose.connect(MONGO_URI, {
 // Definir rutas
 app.use('/api/users', userRoutes);
 app.use('/api/bookings', bookingRoutes);
-app.use('/api/classes', classRoutes);
-app.use('/api/facilities', facilityRoutes);
+app.use('/api/centros', centrosRoutes);
+app.use('/api/servicios', serviciosRoutes);
 // Definir el puerto y poner en marcha el servidor
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3002;
 
 app.get("/",(req,res)=>{
     res.send("Express en Vercel")
