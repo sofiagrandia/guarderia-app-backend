@@ -11,6 +11,11 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    mascotas: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'Mascota',
+        required: true
+    },
     password: {
         type: String,
         required: true

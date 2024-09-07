@@ -1,118 +1,129 @@
-const mongoose = require("mongoose");
-const User = require("./models/user.model");
-const Class = require("./models/class.model");
-const Facility = require("./models/facility.model");
-const Booking = require("./models/booking.model");
+const mongoose = require('mongoose');
+const User = require('./models/user.model');
+const Mascota = require('./models/mascota.model');
+const Servicio = require('./models/servicio.model');
+const Centro = require('./models/centro.model');
+const Booking = require('./models/booking.model');
 const dotenv = require("dotenv");
 
 dotenv.config();
 
 const MONGO_URI = process.env.MONGO_URI;
 
-mongoose
-  .connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log("MongoDB connected for seeding"))
-  .catch((err) => console.error("MongoDB connection error:", err));
+mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('MongoDB connected for seeding'))
+  .catch(err => console.error('MongoDB connection error:', err));
+
+  const mascotas = [
+    {
+      _id: new mongoose.Types.ObjectId(),
+      name: 'Fido',
+      type: 'Dog',
+      raza: 'Golden Retriever',
+      fechaNacimient: new Date(2020, 5, 15),
+    },
+    {
+      _id: new mongoose.Types.ObjectId(),
+      name: 'Whiskers',
+      type: 'Cat',
+      raza: 'Siamese',
+      fechaNacimient: new Date(2018, 10, 25),
+    },
+  ];
 
 const users = [
   {
     _id: new mongoose.Types.ObjectId(),
-    name: "Admin User",
-    email: "admin@example.com",
-    password: "admin123",
-    role: "admin",
+    name: 'Alice',
+    email: 'alice@example.com',
+    mascotas: [mascotas[0]],
+    password: 'password123',
   },
   {
     _id: new mongoose.Types.ObjectId(),
-    name: "Regular User",
-    email: "user@example.com",
-    password: "user123",
-    role: "user",
-  },
-];
-
-const facilities = [
-  {
-    _id: new mongoose.Types.ObjectId(),
-    name: "Gym Hall 1",
-    description: "A fully equipped gym with all modern amenities.",
-    image: "gym-hall-1.jpg",
-    equipment: ["Treadmill", "Dumbbells", "Bench Press"],
-    floor: 1,
-    size: 500,
-  },
-  {
-    _id: new mongoose.Types.ObjectId(),
-    name: "Yoga Room",
-    description: "A peaceful space for yoga and meditation.",
-    image: "yoga-room.jpg",
-    equipment: ["Yoga Mats", "Blocks", "Straps"],
-    floor: 2,
-    size: 200,
+    name: 'Bob',
+    email: 'bob@example.com',
+    mascotas: [mascotas[1]],
+    password: 'password123',
   },
 ];
 
-const classes = [
+const servicios = [
   {
     _id: new mongoose.Types.ObjectId(),
-    name: "Morning Yoga",
-    facility: facilities[1]._id, // Yoga Room
-    description: "A beginner-friendly morning yoga class.",
-    image: "morning-yoga.jpg",
-    availableSpaces: 10,
-    difficulty: 2,
-    time: "08:00 AM",
-    duration: 60, // 60 minutes
+    titulo: 'Spa for Pets',
+    description: 'Relaxing spa services for your pets',
+    image: 'spa.jpg',
+    available: true,
+    precio: 50,
+  },
+  {
+    _id: new mongoose.Types.ObjectId(),
+    titulo: 'Pet Training',
+      description: 'Obedience and behavior training for dogs',
+      image: 'training.jpg',
+      available: true,
+      precio: 100,
+  },
+];
+
+const centros = [
+  {
+    _id: new mongoose.Types.ObjectId(),
+    direccion: '123 Pet Street',
+    image: ['center1.jpg'],
+    telefono: '123-456-7890',
+    plazasDisponibles: 5,
+    servicios: 'All services available',
   },
   {_id: new mongoose.Types.ObjectId(),
-    name: "Advanced Cardio",
-    facility: facilities[0]._id, // Gym Hall 1
-    description: "An advanced cardio class for fitness enthusiasts.",
-    image: "advanced-cardio.jpg",
-    availableSpaces: 15,
-    difficulty: 4,
-    time: "10:00 AM",
-    duration: 45, // 45 minutes
+    direccion: '456 Animal Avenue',
+    image: ['center2.jpg'],
+    telefono: '987-654-3210',
+    plazasDisponibles: 8,
+    servicios: 'Limited services available',
   },
 ];
 
 const bookings = [
     {
-      user: users[1]._id, // Regular User
-      class: classes[0]._id, // Morning Yoga
-      date: new Date(),
-      price: 20,
-      extras: false,
-      discount: 0,
+      user: users[0]._id,
+      centro: centros[0]._id,
+      servicio: servicios[0]._id,
+      dateIn: new Date(2024, 9, 10),
+      dateOut: new Date(2024, 9, 15),
+      price: 200,
+      discount: 20,
     },
     {
-      user: users[1]._id, // Regular User
-      class: classes[1]._id, // Advanced Cardio
-      date: new Date(),
-      price: 30,
-      extras: true,
-      discount: 5, // Apply discount
+      user: users[1]._id,
+      centro: centros[1]._id,
+      servicio: servicios[1]._id,
+      dateIn: new Date(2024, 9, 5),
+      dateOut: new Date(2024, 9, 7),
+      price: 100,
+      discount: 10,
     },
   ];
 
 const seedDB = async () => {
   await User.deleteMany({});
-  await Class.deleteMany({});
-  await Facility.deleteMany({});
+  await Centro.deleteMany({});
+  await Servicio.deleteMany({});
   await Booking.deleteMany({});
 
   for (const user of users) {
     const newUser = new User(user);
     await newUser.save();
   }
-  for (const facility of facilities) {
-    const newFacility= new Facility(facility);
-    await newFacility.save();
+  for (const servicio of servicios) {
+    const newServicio= new Servicio(servicio);
+    await newServicio.save();
   }
 
- for (const myClass of classes) {
-    const newClass= new Class(myClass);
-    await newClass.save();
+ for (const centro of centros) {
+    const newCentro= new Centro(centro);
+    await newCentro.save();
   }
 
 
@@ -120,9 +131,12 @@ const seedDB = async () => {
     const newBooking = new Booking(booking);
     await newBooking.save();
   }
+
+  for (const mascota of mascotas) {
+    const newMascota = new Mascota(mascota);
+    await newMascota.save();
+  }
 };
-
-
 
 seedDB().then(() => {
   console.log(`Seeds creadas correctamente!`);

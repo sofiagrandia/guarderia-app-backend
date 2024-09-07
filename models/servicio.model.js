@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
-const facilitySchema = new mongoose.Schema({
-    name: {
+const servicioSchema = new mongoose.Schema({
+    titulo: {
         type: String,
         required: true
     },
@@ -13,20 +13,16 @@ const facilitySchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    equipment: {
-        type: [String],
+    available: {
+        type: Boolean,
         required: true
-    },
-    floor:{
-        type: Number,
-        required: true
-    },
-    size:{
+    }, 
+    precio: {
         type: Number,
         required: true
     }
 });
 
-const Facility = mongoose.model('Facility', facilitySchema);
+const Servicio = mongoose.model('Servicio', servicioSchema);
 
-module.exports = Facility;
+module.exports = Servicio;

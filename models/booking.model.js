@@ -6,21 +6,26 @@ const bookingSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
-    class: {
+    centro: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Class',
+        ref: 'Centro',
         required: true
     },
-    date: {
+    servicio: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Servicio',
+        required: true
+    },
+    dateIn: {
+        type: Date,
+        required: true
+    },
+    dateOut: {
         type: Date,
         required: true
     },
     price: {
         type: Number,
-        required: true
-    },
-    extras: {
-        type: Boolean,
         required: true
     },
     discount: {

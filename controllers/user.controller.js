@@ -10,12 +10,13 @@ const userController = {
     // Registro de usuario
     register: async (req, res) => {
         try {
-            const { name, email, password } = req.body;
+            const { name, email, password, mascotas } = req.body;
 
             const newUser = new User({
                 name,
                 email,
                 password: password,
+                mascotas: mascotas,
                 //automaticamente son user, a no ser que se ponga manualmente en la BBDD
                 role: 'user'
             });
