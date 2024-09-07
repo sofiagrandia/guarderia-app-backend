@@ -6,8 +6,8 @@ const cors = require("cors")
 // Importar rutas
 const userRoutes = require('./routes/user.routes');
 const bookingRoutes = require('./routes/booking.routes');
-const classRoutes = require('./routes/centros.routes');
-const facilityRoutes = require('./routes/servicios.routes');
+const centroRoutes = require('./routes/centro.routes');
+const servicioRoutes = require('./routes/servicio.routes');
 
 dotenv.config(); // Cargar variables de entorno desde .env
 const app = express();
@@ -30,8 +30,8 @@ mongoose.connect(MONGO_URI, {
 // Definir rutas
 app.use('/api/users', userRoutes);
 app.use('/api/bookings', bookingRoutes);
-app.use('/api/centros', centrosRoutes);
-app.use('/api/servicios', serviciosRoutes);
+app.use('/api/centros', centroRoutes);
+app.use('/api/servicios', servicioRoutes);
 // Definir el puerto y poner en marcha el servidor
 const PORT = process.env.PORT || 3002;
 
