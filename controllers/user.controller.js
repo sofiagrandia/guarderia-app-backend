@@ -10,12 +10,16 @@ const userController = {
     // Registro de usuario
     register: async (req, res) => {
         try {
-            const { name, email, password, mascotas } = req.body;
+            const { name, email, password, mascotas = []} = req.body;
 
             const validMascotas = [];
+            if(mascotas==null){
+                validMascotas.push("");
+            }
             for (const mascota of mascotas) {
               const foundMascota = await Mascota.findById(mascota._id);
               if (!foundMascota) {
+                validMascotas.push("");
                 return res.status(400).json({ message: `Mascota with id ${mascota._id} not found` });
               }
               validMascotas.push(mascota._id);
