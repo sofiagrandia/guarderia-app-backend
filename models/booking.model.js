@@ -11,11 +11,6 @@ const bookingSchema = new mongoose.Schema({
         ref: 'Centro',
         required: true
     },
-    servicio: {
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: 'Servicio',
-        required: true
-    },
     dateIn: {
         type: Date,
         required: true
@@ -37,7 +32,12 @@ const bookingSchema = new mongoose.Schema({
             },
             message: 'El descuento no puede ser negativo.'
         }
-    }
+    },
+    services: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'Servicio',
+        required: true
+    },
 });
 
 // Método para calcular el precio final después del descuento

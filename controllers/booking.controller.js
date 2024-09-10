@@ -5,30 +5,32 @@ const bookingController = {
   // Crear una nueva reserva
   createBooking: async (req, res) => {
     try {
-      const { centro, servicio, dateIn, dateOut, price, discount } = req.body;
-
+      const { centro, dateIn, dateOut, price, discount, services } = req.body;
+      console.log("Servicios en back", services)
+      console.log(req.body);
       // Verificar disponibilidad del centro
       const centroAvailable = await Centro.findById(centro);
-      if (!centroAvailable.availableSpaces > 0) {
-        return res.status(400).json({ message: "Centro no disponible" });
+      if (centroAvailable.availableSpaces <= 0) {
+        return res.status(400).json({ message: "No hay plazas disponibles" });
       }
 
       const newBooking = new Booking({
         user: req.user._id,
         centro,
-        servicio,
         dateIn,
         dateOut,
         price,
         discount,
+        services
       });
 
+      console.log(newBooking)
       await newBooking.save();
 
       // Actualizar la disponibilidad de la centro
-      await Centro.findByIdAndUpdate(centro, {
+      /*await Centro.findByIdAndUpdate(centro, {
         availableSpaces: availableSpaces - 1,
-      });
+      });*/
 
       res
         .status(201)
@@ -37,6 +39,7 @@ const bookingController = {
       res
         .status(500)
         .json({ message: "Error al crear la reserva", error: error.message });
+        console.log(error);
     }
   },
 
