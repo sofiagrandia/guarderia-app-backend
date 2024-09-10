@@ -21,6 +21,10 @@ const centroSchema = new mongoose.Schema({
         type: [mongoose.Schema.Types.ObjectId],
         ref:'Servicio',
         required: true
+    },
+    precioBase:{
+        type: Number,
+        required: true
     }
 });
 

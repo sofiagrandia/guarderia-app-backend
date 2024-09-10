@@ -8,7 +8,7 @@ const userRoutes = require('./routes/user.routes');
 const bookingRoutes = require('./routes/booking.routes');
 const centroRoutes = require('./routes/centro.routes');
 const servicioRoutes = require('./routes/servicio.routes');
-
+const mascotaRoutes =require('./routes/mascota.routes');
 dotenv.config(); // Cargar variables de entorno desde .env
 const app = express();
 
@@ -32,6 +32,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/centros', centroRoutes);
 app.use('/api/servicios', servicioRoutes);
+app.use('/api/mascotas', mascotaRoutes);
 // Definir el puerto y poner en marcha el servidor
 const PORT = process.env.PORT || 3002;
 

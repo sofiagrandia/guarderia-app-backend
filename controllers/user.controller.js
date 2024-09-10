@@ -12,11 +12,20 @@ const userController = {
         try {
             const { name, email, password, mascotas } = req.body;
 
+            const validMascotas = [];
+            for (const mascota of mascotas) {
+              const foundMascota = await Mascota.findById(mascota._id);
+              if (!foundMascota) {
+                return res.status(400).json({ message: `Mascota with id ${mascota._id} not found` });
+              }
+              validMascotas.push(mascota._id);
+            }
+
             const newUser = new User({
                 name,
                 email,
                 password: password,
-                mascotas: mascotas,
+                mascotas: validMascotas,
                 //automaticamente son user, a no ser que se ponga manualmente en la BBDD
                 role: 'user'
             });

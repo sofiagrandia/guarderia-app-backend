@@ -76,6 +76,7 @@ const centros = [
     telefono: '123-456-7890',
     plazasDisponibles: 5,
     servicios: [servicios[0]._id, servicios[1]._id],
+    precioBase: 50
   },
   {_id: new mongoose.Types.ObjectId(),
     direccion: '456 Animal Avenue',
@@ -83,6 +84,7 @@ const centros = [
     telefono: '987-654-3210',
     plazasDisponibles: 8,
     servicios: [servicios[1]._id],
+    precioBase: 40
   },
 ];
 
@@ -90,7 +92,7 @@ const bookings = [
     {
       user: users[0]._id,
       centro: centros[0]._id,
-      servicio: servicios[0]._id,
+      servicio: [servicios[0]._id],
       dateIn: new Date(2024, 9, 10),
       dateOut: new Date(2024, 9, 15),
       price: 200,
@@ -99,7 +101,7 @@ const bookings = [
     {
       user: users[1]._id,
       centro: centros[1]._id,
-      servicio: servicios[1]._id,
+      servicio: [servicios[1]._id],
       dateIn: new Date(2024, 9, 5),
       dateOut: new Date(2024, 9, 7),
       price: 100,

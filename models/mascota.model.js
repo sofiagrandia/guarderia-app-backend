@@ -14,7 +14,7 @@ const mascotaSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    fechaNacimient: {
+    fechaNacimiento: {
         type: Date,
         required: true
     }

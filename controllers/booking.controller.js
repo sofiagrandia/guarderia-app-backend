@@ -83,7 +83,7 @@ const bookingController = {
         return res.status(404).json({ message: "Reserva no encontrada" });
       }
 
-      // Actualizar la disponibilidad del centro
+      // Actualizar la disponibilidad del vehículo
       await Centro.findByIdAndUpdate(booking.centro, {
         availableSpaces: availableSpaces + 1,
       });
