@@ -17,15 +17,16 @@ const centroSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    precioBase:{
+        type: Number,
+        required: true
+    },
     servicios:{
         type: [mongoose.Schema.Types.ObjectId],
         ref:'Servicio',
         required: true
-    },
-    precioBase:{
-        type: Number,
-        required: true
     }
+    
 });
 
 const Centro = mongoose.model('Centro', centroSchema);

@@ -9,6 +9,7 @@ const centroController = {
         image,
         telefono,
         plazasDisponibles,
+        precioBase,
         servicios
       } = req.body;
       const newCentro = new Centro({
@@ -16,6 +17,7 @@ const centroController = {
         image,
         telefono,
         plazasDisponibles,
+        precioBase,
         servicios
       });
 

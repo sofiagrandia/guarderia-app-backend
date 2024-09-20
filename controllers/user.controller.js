@@ -24,6 +24,7 @@ const userController = {
   getUser: async (req, res) => {
     try {
       const { userId } = req.params;
+    
       const user = await User.findById(userId);
 
       if (!user) {
@@ -42,9 +43,10 @@ const userController = {
 
   register: async (req, res) => {
     try {
-      const { name, email, password, mascotas = [] } = req.body;
+      const { name, email, password, mascotas = [], image ='' } = req.body;
 
       const validMascotas = [];
+      const noImage = "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541";
       if (mascotas == null) {
         validMascotas.push("");
       }
@@ -64,6 +66,7 @@ const userController = {
         email,
         password: password,
         mascotas: validMascotas,
+        image: noImage,
         //automaticamente son user, a no ser que se ponga manualmente en la BBDD
         role: "user",
       });
@@ -116,14 +119,27 @@ const userController = {
     console.log("Request Body:", req.body);
     try {
       const { userId } = req.params;
-      const { _id, name, email, mascotas = [], password, role, __v } = req.body;
-      const updatedUser = await User.findByIdAndUpdate(
-        userId,
-        { _id, name, email, mascotas, password, role, __v },
-        { new: true }
-      );
+      const { _id, name, email, mascotas = [], password, image, role, __v } = req.body;
+      const hashedPassword = await bcrypt.hash(password,10);
+      console.log(hashedPassword);
+      const currentUser = await User.findById(userId);
+      let updatedUser = null;
+      if(currentUser.password===password){
+         updatedUser = await User.findByIdAndUpdate(
+          userId,
+          { _id, name, email, mascotas, password, image, role, __v },
+          { new: true }
+        );
+      }else{
+         updatedUser = await User.findByIdAndUpdate(
+          userId,
+          { _id, name, email, mascotas, password: hashedPassword, image, role, __v },
+          { new: true }
+        );
+      }
+      
       console.log("User ID from request:", userId);
-      console.log("Updated data from request body:", { name, email, mascotas });
+      console.log("Updated data from request body:", { name, email, mascotas, password });
 
       console.log("updated user back", updatedUser);
       if (!updatedUser) {
@@ -142,6 +158,25 @@ const userController = {
         });
     }
   },
+
+    // Eliminar un servicio
+    deleteUser: async (req, res) => {
+        try {
+          const { userId } = req.params;
+          const deletedUser = await User.findByIdAndDelete(userId);
+    
+          if (!deletedUser) {
+            return res.status(404).json({ message: "Usuario no encontrado" });
+          }
+    
+          res.status(200).json({ message: "Usuario eliminado con éxito" });
+        } catch (error) {
+          res.status(500).json({
+            message: "Error al eliminar el Usuario",
+            error: error.message,
+          });
+        }
+      },
 };
 
 module.exports = userController;

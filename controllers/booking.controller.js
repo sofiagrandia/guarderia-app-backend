@@ -6,11 +6,43 @@ const bookingController = {
   createBooking: async (req, res) => {
     try {
       const { centro, dateIn, dateOut, price, discount, services } = req.body;
-      console.log("Servicios en back", services)
+      console.log("Servicios en back", services);
       console.log(req.body);
+
+
       // Verificar disponibilidad del centro
       const centroAvailable = await Centro.findById(centro);
-      if (centroAvailable.availableSpaces <= 0) {
+
+       // Convert dateIn and dateOut to Date objects for querying
+       const startDate = new Date(dateIn);
+       const endDate = new Date(dateOut);
+ 
+       // Check if the centro exists
+       if (!centroAvailable) {
+         return res.status(404).json({ message: "Centro no encontrado" });
+       }
+ 
+       // Check for existing bookings that overlap with the desired date range
+       const overlappingBookings = await Booking.find({
+         centro,
+         $or: [
+           // Existing booking starts during the requested period
+           { dateIn: { $lt: endDate }, dateOut: { $gte: startDate } },
+           // Existing booking ends during the requested period
+           { dateOut: { $gt: startDate }, dateIn: { $lte: endDate } }
+         ]
+       });
+ 
+       // Calculate the number of spaces that are already booked during this period
+       const bookedSpaces = overlappingBookings.length;
+ 
+       // Check if there are enough available spaces
+       if (bookedSpaces >= centroAvailable.plazasDisponibles) {
+         return res.status(400).json({
+           message: `No hay suficientes plazas disponibles para las fechas seleccionadas. ${bookedSpaces} ya están reservadas.`
+         });
+       }
+      if (centroAvailable.plazasDisponibles <= 0) {
         return res.status(400).json({ message: "No hay plazas disponibles" });
       }
 
@@ -19,12 +51,13 @@ const bookingController = {
         centro,
         dateIn,
         dateOut,
+        
         price,
         discount,
-        services
+        services,
       });
 
-      console.log(newBooking)
+      console.log(newBooking);
       await newBooking.save();
 
       // Actualizar la disponibilidad de la centro
@@ -39,7 +72,7 @@ const bookingController = {
       res
         .status(500)
         .json({ message: "Error al crear la reserva", error: error.message });
-        console.log(error);
+      console.log(error);
     }
   },
 
@@ -76,10 +109,22 @@ const bookingController = {
     }
   },
 
+  getAllBookings: async (req, res) => {
+    try {
+
+      const booking = await Booking.find({});
+
+      res.status(200).json(booking);
+    } catch (error) {
+      res
+        .status(500)
+        .json({ message: "Error al obtener las reservas", error: error.message });
+    }
+  },
   // Cancelar una reserva
   cancelBooking: async (req, res) => {
     try {
-      const { id } = req.params;
+      const { userId, id } = req.params;
 
       const booking = await Booking.findById(id);
       if (!booking) {
@@ -87,14 +132,23 @@ const bookingController = {
       }
 
       // Actualizar la disponibilidad del vehículo
+      const centro = await Centro.findById(booking.centro);
+      if (!centro) {
+        return res.status(404).json({ message: "Centro no encontrado" });
+      }
+
+      // Update the available spaces
+      const updatedPlazasDisponibles = centro.plazasDisponibles + 1;
+
       await Centro.findByIdAndUpdate(booking.centro, {
-        availableSpaces: availableSpaces + 1,
+        plazasDisponibles: updatedPlazasDisponibles,
       });
 
       await Booking.findByIdAndDelete(id);
 
       res.status(200).json({ message: "Booking cancelled successfully" });
     } catch (error) {
+      console.log(error.message);
       res.status(500).json({
         message: "Error al cancelar la reserva",
         error: error.message,
